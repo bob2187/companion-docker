@@ -1,17 +1,21 @@
-# File: README.md
 # Bitfocus Companion Docker for ARM64
 
 Docker image for Bitfocus Companion running on ARM64 devices (like Raspberry Pi).
 
 ## Quick Start
 ```bash
+docker pull bob2187/companion-arm64:latest
 mkdir companion && cd companion
+curl -O https://raw.githubusercontent.com/bob2187/companion-docker/main/docker-compose.yml
 docker compose up -d
 ```
 
-Access the web interface at:
-- Local: http://localhost:8000
-- Network: http://YOUR-PI-IP:8000
+## Features
+- ARM64 native support
+- Headless operation
+- USB device support for Stream Deck
+- Persistent configuration
+- Automatic restart on boot
 
 ## Requirements
 - ARM64 device (like Raspberry Pi 4/5)
@@ -40,10 +44,13 @@ The container uses several volumes for persistence:
 - `./config`: Configuration files
 - `/dev/bus/usb`: USB device access (for Stream Deck)
 
-## Support
-For issues, please create a ticket in the GitHub repository.
+## Access
+Web interface available at:
+- Local: http://localhost:8000
+- Network: http://YOUR-PI-IP:8000
 
-# File: docker-compose.yml
+## docker-compose.yml
+```yaml
 version: '3.8'
 
 services:
@@ -65,31 +72,43 @@ services:
       - COMPANION_NO_GUI=1
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
+```
 
-# File: .gitignore
-data/
-config/
-*.log
+## Troubleshooting
+If you encounter issues:
 
-# File: LICENSE
+1. Check container logs:
+```bash
+docker compose logs -f
+```
+
+2. Verify USB devices are accessible:
+```bash
+lsusb
+```
+
+3. Check network access:
+```bash
+curl http://localhost:8000
+```
+
+4. Restart the container:
+```bash
+docker compose restart
+```
+
+5. Rebuild from scratch:
+```bash
+docker compose down
+docker compose up -d
+```
+
+## Support
+For issues, please create a ticket in the GitHub repository.
+
+## License
 MIT License
 
-Copyright (c) 2024 bob2187
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## Credits
+- Built on [Bitfocus Companion](https://bitfocus.io/companion)
+- Containerized for ARM64 devices by bob2187
